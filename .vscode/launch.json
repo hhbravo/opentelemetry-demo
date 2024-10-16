@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-App<opentelemetry>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.opentelemetry.demo.App",
+      "projectName": "opentelemetry",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
