@@ -45,7 +45,7 @@ public class App {
 
     // Set up the OpenTelemetry exporter (OTLP in this case)
     OtlpGrpcSpanExporter spanExporter = OtlpGrpcSpanExporter.builder()
-    .setEndpoint("http://otel-collector:4343")   // Cambia localhost a otel-collector
+    .setEndpoint("http://otel-collector:4317")   // Cambia localhost a otel-collector
         .build();
 
     // Create a tracer provider with the span processor and exporter
