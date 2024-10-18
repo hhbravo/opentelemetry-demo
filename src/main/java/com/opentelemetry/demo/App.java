@@ -1,9 +1,13 @@
 package com.opentelemetry.demo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cglib.core.Local;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.annotation.ObjectIdGenerators.UUIDGenerator;
 
 import io.opentelemetry.api.GlobalOpenTelemetry;
 import io.opentelemetry.api.OpenTelemetry;
@@ -28,14 +32,14 @@ import io.opentelemetry.api.common.Attributes;
 public class App {
 
   private static final String SERVICE_NAME = "opentelemetry";
-  private static OpenTelemetry openTelemetry;
+  //private static OpenTelemetry openTelemetry;
 
   public static void main(String[] args) {
-    initializeOpenTelemetry();
+   // initializeOpenTelemetry();
     SpringApplication.run(App.class, args);
   }
 
-
+/* 
   private static void initializeOpenTelemetry() {
     // Create a resource with service name for identifying the service in traces
     Resource resource = Resource.getDefault()
@@ -57,24 +61,6 @@ public class App {
     openTelemetry = OpenTelemetrySdk.builder()
             .setTracerProvider(sdkTracerProvider)
             .buildAndRegisterGlobal();
-}
+} */
 
-
-  @RestController
-  class HomeController {
-    private Tracer tracer = GlobalOpenTelemetry.getTracer("example-tracer");
-
-    @GetMapping("/hello")
-    public String hello() {
-      Span span = tracer.spanBuilder("example-span")
-      .setSpanKind(SpanKind.SERVER)
-      .startSpan();
-      
-      try(Scope scope = span.makeCurrent()) {
-        return "Hola";
-      } finally {
-        span.end();
-      }
-    }
-  }
 }

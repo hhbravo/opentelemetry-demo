@@ -7,12 +7,12 @@ receivers:
         endpoint: "0.0.0.0:4318"  # Cambiado de localhost a 0.0.0.0
 
 exporters:
-  debug: {}
-  otlp:
-    endpoint: "http://otel-collector:4317"
+  zipkin:
+    endpoint: "http://jaeger:9411/api/v2/spans"
 
 service:
   pipelines:
     traces:
       receivers: [otlp]
-      exporters: [debug]
+      processors: []
+      exporters: [zipkin]
