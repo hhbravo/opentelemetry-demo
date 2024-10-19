@@ -6,15 +6,20 @@ receivers:
       http:
         endpoint: "0.0.0.0:4318"
 
+extensions:
+  health_check: {}
+
 exporters:
   otlp:
-    endpoint: "http://jaeger:14250"
-    tls:
-      insecure: true
+    endpoint: "http://jaeger:4317"
+  prometheus:
+    endpoint: "0.0.0.0:9090"
 
 service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: []
       exporters: [otlp]
+    metrics:
+      receivers: [otlp]
+      exporters: [prometheus]

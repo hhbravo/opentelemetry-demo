@@ -1,4 +1,5 @@
 package com.opentelemetry.demo;
+
 import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.sdk.OpenTelemetrySdk;
