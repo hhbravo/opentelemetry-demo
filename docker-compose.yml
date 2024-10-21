@@ -1,6 +1,18 @@
 version: '3.8'
 
 services:
+  otel-collector:
+    image: otel/opentelemetry-collector:latest
+    volumes:
+      - ./otel-config.yml:/etc/otel-collector-config.yml
+    command: ["--config=/etc/otel-collector-config.yml"]
+    ports:
+      - "4317:4317"  # Puerto para OTLP gRPC
+      - "4318:4318"  # Puerto para OTLP HTTP
+      - "8887:8887"  # Puerto para Prometheus
+    networks:
+      - otel-network
+
   opentelemetry-app:
     build: .
     environment:
@@ -10,34 +22,42 @@ services:
       - "8080:8080"
     depends_on:
       - otel-collector
+    networks:
+      - otel-network
 
-  otel-collector:
-    image: otel/opentelemetry-collector:latest
-    volumes:
-      - ./otel-config.yml:/etc/otel-config.yml
-    command: ["--config=/etc/otel-config.yml"]
+  jaeger:
+    image: jaegertracing/all-in-one:latest
     ports:
-      - "4317:4317"  # Puerto para OTLP gRPC
-      - "4318:4318"  # Puerto para OTLP HTTP
+      - "16686:16686"  # Interfaz de Jaeger
+      - "14268:14268"  # Puerto para recibir trazas en formato OTLP HTTP
+      - "14250:14250"  # Puerto para recibir trazas en formato OTLP gRPC
+      - "5778:5778"    # Server configs
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5775:5775/udp"
+    networks:
+      - otel-network
 
   prometheus:
     image: prom/prometheus:latest
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
-      - "9090:9090"
+      - "9090:9090"  # Cambiado a 9091
+    networks:
+      - otel-network
 
   grafana:
     image: grafana/grafana:latest
     ports:
       - "3000:3000"
+    networks:
+      - otel-network
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     depends_on:
       - prometheus
 
-  jaeger:
-    image: jaegertracing/all-in-one:latest
-    ports:
-      - "14250:14250"
-      - "16686:16686"
+networks:
+  otel-network:
+    driver: bridge

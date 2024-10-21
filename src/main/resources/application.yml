@@ -1,2 +1,12 @@
 server:
   port: 8080
+
+management:
+  metrics:
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+
+spring:
+  application:
+    name: opentelemetry-app
