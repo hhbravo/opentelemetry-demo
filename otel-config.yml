@@ -18,8 +18,9 @@ exporters:
     endpoint: "0.0.0.0:8887"
   otlp:
     endpoint: "jaeger:14250"
+    #insecure: true
     tls:
-      insecure: true
+      insecure_skip_verify: true
 
 service:
   pipelines:
